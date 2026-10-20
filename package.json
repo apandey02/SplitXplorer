@@ -1,0 +1,992 @@
+{
+  "name": "splitxplorer",
+  "displayName": "SplitXplorer",
+  "description": "Split the Explorer into named, collapsible sections: Gitacknowledged, Gitignored, and your own sections with glob rules and drag and drop.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "SplitXplorer",
+      "properties": {
+        "splitXplorer.dragBehavior": {
+          "type": "string",
+          "enum": [
+            "move",
+            "copy"
+          ],
+          "enumDescriptions": [
+            "Dragging between sections moves the item out of the source section.",
+            "Dragging between sections leaves the item in the source section too."
+          ],
+          "default": "move",
+          "description": "What happens when you drag a file or folder from one SplitXplorer section to another."
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "splitXplorer.section1",
+          "name": "Gitacknowledged",
+          "when": "splitXplorer.slot1"
+        },
+        {
+          "id": "splitXplorer.section2",
+          "name": "Gitignored",
+          "when": "splitXplorer.slot2"
+        },
+        {
+          "id": "splitXplorer.section3",
+          "name": "Custom Section 1",
+          "when": "splitXplorer.slot3"
+        },
+        {
+          "id": "splitXplorer.section4",
+          "name": "Custom Section 2",
+          "when": "splitXplorer.slot4"
+        },
+        {
+          "id": "splitXplorer.section5",
+          "name": "Custom Section 3",
+          "when": "splitXplorer.slot5"
+        },
+        {
+          "id": "splitXplorer.section6",
+          "name": "Custom Section 4",
+          "when": "splitXplorer.slot6"
+        },
+        {
+          "id": "splitXplorer.section7",
+          "name": "Custom Section 5",
+          "when": "splitXplorer.slot7"
+        },
+        {
+          "id": "splitXplorer.section8",
+          "name": "Custom Section 6",
+          "when": "splitXplorer.slot8"
+        },
+        {
+          "id": "splitXplorer.section9",
+          "name": "Custom Section 7",
+          "when": "splitXplorer.slot9"
+        },
+        {
+          "id": "splitXplorer.section10",
+          "name": "Custom Section 8",
+          "when": "splitXplorer.slot10"
+        },
+        {
+          "id": "splitXplorer.section11",
+          "name": "Custom Section 9",
+          "when": "splitXplorer.slot11"
+        },
+        {
+          "id": "splitXplorer.section12",
+          "name": "Custom Section 10",
+          "when": "splitXplorer.slot12"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "splitXplorer.addSection",
+        "title": "Add Section",
+        "category": "SplitXplorer",
+        "icon": "$(add)"
+      },
+      {
+        "command": "splitXplorer.renameSection",
+        "title": "Rename Section",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.editSectionRules",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.removeSection",
+        "title": "Remove Section",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.refresh",
+        "title": "Refresh",
+        "category": "SplitXplorer",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "splitXplorer.toggleBuiltInExclude",
+        "title": "Toggle Hiding Gitignored Files in Built-in Explorer",
+        "category": "SplitXplorer",
+        "icon": "$(eye)"
+      },
+      {
+        "command": "splitXplorer.moveToSection",
+        "title": "Move to Section...",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.addToSection",
+        "title": "Also Show in Section...",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.removeFromSection",
+        "title": "Remove from This Section",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.showInSection",
+        "title": "Show in SplitXplorer Section...",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.revealInExplorer",
+        "title": "Reveal in Explorer View",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.revealInOS",
+        "title": "Reveal in File Explorer",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.copyPath",
+        "title": "Copy Path",
+        "category": "SplitXplorer"
+      },
+      {
+        "command": "splitXplorer.rename.1",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.1",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.1",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.1",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.2",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.2",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.2",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.2",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.3",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.3",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.3",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.3",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.4",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.4",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.4",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.4",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.5",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.5",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.5",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.5",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.6",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.6",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.6",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.6",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.7",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.7",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.7",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.7",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.8",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.8",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.8",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.8",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.9",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.9",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.9",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.9",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.10",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.10",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.10",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.10",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.11",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.11",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.11",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.11",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "splitXplorer.rename.12",
+        "title": "Rename Section",
+        "category": "SplitXplorer",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "splitXplorer.editRules.12",
+        "title": "Edit Section Rules",
+        "category": "SplitXplorer",
+        "icon": "$(list-filter)"
+      },
+      {
+        "command": "splitXplorer.addFiles.12",
+        "title": "Add Files or Folders to Section",
+        "category": "SplitXplorer",
+        "icon": "$(file-add)"
+      },
+      {
+        "command": "splitXplorer.remove.12",
+        "title": "Remove Section",
+        "category": "SplitXplorer",
+        "icon": "$(trash)"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "splitXplorer.addSection",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "splitXplorer.refresh",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "navigation@2"
+        },
+        {
+          "command": "splitXplorer.rename.1",
+          "when": "view == splitXplorer.section1",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.1",
+          "when": "view == splitXplorer.section1",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.1",
+          "when": "view == splitXplorer.section1",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.1",
+          "when": "view == splitXplorer.section1",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.2",
+          "when": "view == splitXplorer.section2",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.2",
+          "when": "view == splitXplorer.section2",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.2",
+          "when": "view == splitXplorer.section2",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.2",
+          "when": "view == splitXplorer.section2",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.3",
+          "when": "view == splitXplorer.section3",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.3",
+          "when": "view == splitXplorer.section3",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.3",
+          "when": "view == splitXplorer.section3",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.3",
+          "when": "view == splitXplorer.section3",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.4",
+          "when": "view == splitXplorer.section4",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.4",
+          "when": "view == splitXplorer.section4",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.4",
+          "when": "view == splitXplorer.section4",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.4",
+          "when": "view == splitXplorer.section4",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.5",
+          "when": "view == splitXplorer.section5",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.5",
+          "when": "view == splitXplorer.section5",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.5",
+          "when": "view == splitXplorer.section5",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.5",
+          "when": "view == splitXplorer.section5",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.6",
+          "when": "view == splitXplorer.section6",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.6",
+          "when": "view == splitXplorer.section6",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.6",
+          "when": "view == splitXplorer.section6",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.6",
+          "when": "view == splitXplorer.section6",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.7",
+          "when": "view == splitXplorer.section7",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.7",
+          "when": "view == splitXplorer.section7",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.7",
+          "when": "view == splitXplorer.section7",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.7",
+          "when": "view == splitXplorer.section7",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.8",
+          "when": "view == splitXplorer.section8",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.8",
+          "when": "view == splitXplorer.section8",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.8",
+          "when": "view == splitXplorer.section8",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.8",
+          "when": "view == splitXplorer.section8",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.9",
+          "when": "view == splitXplorer.section9",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.9",
+          "when": "view == splitXplorer.section9",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.9",
+          "when": "view == splitXplorer.section9",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.9",
+          "when": "view == splitXplorer.section9",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.10",
+          "when": "view == splitXplorer.section10",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.10",
+          "when": "view == splitXplorer.section10",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.10",
+          "when": "view == splitXplorer.section10",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.10",
+          "when": "view == splitXplorer.section10",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.11",
+          "when": "view == splitXplorer.section11",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.11",
+          "when": "view == splitXplorer.section11",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.11",
+          "when": "view == splitXplorer.section11",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.11",
+          "when": "view == splitXplorer.section11",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.rename.12",
+          "when": "view == splitXplorer.section12",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.editRules.12",
+          "when": "view == splitXplorer.section12",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.addFiles.12",
+          "when": "view == splitXplorer.section12",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.remove.12",
+          "when": "view == splitXplorer.section12",
+          "group": "9_remove@1"
+        },
+        {
+          "command": "splitXplorer.toggleBuiltInExclude",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "5_builtin@1"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "splitXplorer.moveToSection",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "1_section@1"
+        },
+        {
+          "command": "splitXplorer.addToSection",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "1_section@2"
+        },
+        {
+          "command": "splitXplorer.removeFromSection",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "1_section@3"
+        },
+        {
+          "command": "splitXplorer.revealInExplorer",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "navigation@1"
+        },
+        {
+          "command": "splitXplorer.revealInOS",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "navigation@2"
+        },
+        {
+          "command": "splitXplorer.copyPath",
+          "when": "view =~ /^splitXplorer\\.section\\d+$/",
+          "group": "6_copypath@1"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "splitXplorer.showInSection",
+          "group": "7_splitxplorer@1"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "splitXplorer.moveToSection",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addToSection",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.removeFromSection",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.showInSection",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.revealInExplorer",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.revealInOS",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.copyPath",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.1",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.1",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.1",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.1",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.2",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.2",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.2",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.2",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.3",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.3",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.3",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.3",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.4",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.4",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.4",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.4",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.5",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.5",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.5",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.5",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.6",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.6",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.6",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.6",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.7",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.7",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.7",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.7",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.8",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.8",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.8",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.8",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.9",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.9",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.9",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.9",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.10",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.10",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.10",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.10",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.11",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.11",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.11",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.11",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.rename.12",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.editRules.12",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.addFiles.12",
+          "when": "false"
+        },
+        {
+          "command": "splitXplorer.remove.12",
+          "when": "false"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "manifest": "node ./scripts/manifest.js",
+    "test": "npm run test:index && npm run test:rules",
+    "test:index": "node ./out/test/gitIndex.test.js",
+    "test:rules": "node ./out/test/rules.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.0"
+  }
+}
