@@ -5,6 +5,14 @@
   "version": "0.1.0",
   "publisher": "local",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apandey02/SplitXplorer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/apandey02/SplitXplorer/issues"
+  },
+  "homepage": "https://github.com/apandey02/SplitXplorer#readme",
   "engines": {
     "vscode": "^1.85.0"
   },
